@@ -1,8 +1,11 @@
-const supported_languages = ['php','c++'];
+const supported_languages = ['c++','rust'];
 
 const list_of_compilers = {
     'c++':{
         'compiler': require('../compilers/cpp/CppCompiler')
+    },
+    'rust':{
+        'compiler': require('../compilers/rust/RustCompiler')
     }
 };
 
