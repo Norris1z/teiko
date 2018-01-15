@@ -8,16 +8,17 @@ class RustCompiler{
         this.cmd = 'rustc';
         this.tmpFile = path.join(__dirname,'files','demo.rs');
         this.outFile = path.join(__dirname,'files','demo.s');
+        this.args = ['--emit=asm',this.tmpFile,'--crate-type=lib','-o',this.outFile];
     }
 
    async compile(code){
-        var wstream = fs.createWriteStream(this.tmpFile);
-        wstream.write(code);
-        wstream.end();
+        var ws = fs.createWriteStream(this.tmpFile);
+        ws.write(code);
+        ws.end();
 
-        const child = spawn(this.cmd,['--emit=asm',this.tmpFile,'--crate-type=lib','-o',this.outFile]);
+        const p = spawn(this.cmd, this.args);
 
-        let error = await streamToPromise(child.stderr);
+        let error = await streamToPromise(p.stderr);
 
         return {filename: this.outFile,output:error.toString('utf-8')};
     }
