@@ -1,11 +1,19 @@
 import React , { Component } from 'react';
 import {Controlled as CodeMirror} from 'react-codemirror2';
+import { connect } from 'react-redux';
 import '../../node_modules/codemirror/lib/codemirror.css';
 import '../../node_modules/codemirror/theme/material.css';
+import '../../node_modules/codemirror/theme/ambiance.css';
+import '../../node_modules/codemirror/theme/dracula.css';
+import '../../node_modules/codemirror/theme/cobalt.css';
 import 'codemirror/mode/clike/clike';
+import 'codemirror/mode/rust/rust';
+import 'codemirror/mode/gas/gas';
 import '../styles/editor.css';
 
 const API_URL = 'http://localhost:8000/compile';
+
+const LANGUAGE_MODES = {'c++':'clike','rust':'rust'};
 
 class Code extends Component{
     constructor(props){
@@ -13,7 +21,9 @@ class Code extends Component{
         
         this.state = {
             code: '',
-            output: ''
+            output: '',
+            language: this.props.language,
+            theme: this.props.theme
         };
 
         this.typingTimer = null;
@@ -28,17 +38,21 @@ class Code extends Component{
                     'Accept': 'application/json',
                     'Content-Type' : 'application/json'
                 },
-                body: JSON.stringify({language:'c++',code:this.state.code})
+                body: JSON.stringify({language:this.state.language.toLowerCase(),code:this.state.code})
             });
             let response = await rawResponse.json();
             this.setState({output: response});
         }catch(e){
-            this.setState({output: '<Compilation failed...> Something went wrong'});
+            this.setState({output: '<Compilation failed...>'});
             console.log(e);
         }
     }
 
-    render(){
+    componentWillReceiveProps(props){
+        this.setState({language:props.language,theme:props.theme});
+    }
+
+    render(){ 
         return(
             <div>
                 <div className="code_container code">
@@ -46,8 +60,8 @@ class Code extends Component{
                         value={this.state.code}
                         
                         options={{
-                            mode: 'clike',
-                            theme: 'material',
+                            mode: LANGUAGE_MODES[this.state.language.toLowerCase()],
+                            theme: this.state.theme.toLowerCase(),
                             lineNumbers: true
                         }}
 
@@ -72,8 +86,8 @@ class Code extends Component{
                     <CodeMirror
                         value={this.state.output}
                         options={{
-                            mode: 'clike',
-                            theme: 'material',
+                            mode: 'gas',
+                            theme: this.state.theme.toLowerCase(),
                             lineNumbers: true,
                             readOnly: true
                         }}
@@ -84,4 +98,12 @@ class Code extends Component{
     }
 }
 
-export default Code;
+
+function mapStateToProps(state) {
+    return Object.assign({},state,{
+        language: state.language,
+        theme: state.theme
+    })
+}
+
+export default connect(mapStateToProps,null)(Code);
