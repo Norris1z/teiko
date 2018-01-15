@@ -1,0 +1,20 @@
+.code_container{
+    vertical-align: top;
+    /* margin-top: 10%; */
+    box-sizing: border-box;
+    margin: 0 2%;
+    width: 45%;
+}
+  
+.react-codemirror2 {
+    height: 550px;
+}
+
+.CodeMirror {
+    height: 100%;
+    border: solid 1px transparent;
+}
+
+.code{
+    display: inline-block;
+}
