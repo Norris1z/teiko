@@ -17,9 +17,9 @@ class CppCompiler{
 
         const child = spawn(this.cmd,[this.tmpFile,'-S','-o',this.outFile]);
 
-        let data = await streamToPromise(child.stderr);
+        let error = await streamToPromise(child.stderr);
 
-        return {filename: this.outFile,output:data.toString('utf-8')};
+        return {filename: this.outFile,output:error.toString('utf-8')};
     }
 }
 

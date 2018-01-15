@@ -17,9 +17,9 @@ class RustCompiler{
 
         const child = spawn(this.cmd,['--emit=asm',this.tmpFile,'--crate-type=lib','-o',this.outFile]);
 
-        let data = await streamToPromise(child.stderr);
+        let error = await streamToPromise(child.stderr);
 
-        return {filename: this.outFile,output:data.toString('utf-8')};
+        return {filename: this.outFile,output:error.toString('utf-8')};
     }
 }
 
