@@ -1,8 +1,9 @@
-import { CHANGE_LANGUAGE, CHANGE_THEME } from '../constants';
+import { CHANGE_LANGUAGE, CHANGE_THEME, UPDATE_OUTPUT } from '../constants';
 
 const initialState = {
     language: 'C++',
-    theme: 'Material'
+    theme: 'Material',
+    output: ''
 }
 
 export default function(state = initialState, action){
@@ -16,6 +17,11 @@ export default function(state = initialState, action){
 
                 return Object.assign({},state,{
                     theme: action.theme
+                });
+
+            case UPDATE_OUTPUT:
+                return Object.assign({},state,{
+                    output: action.output
                 });
             default:
                 return state;
