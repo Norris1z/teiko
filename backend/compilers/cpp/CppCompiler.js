@@ -1,26 +1,30 @@
-const { spawn } = require('child_process');
-const streamToPromise = require('stream-to-promise');
+const { execSync } = require('child_process');
+const ASMParser = require('../../utils/asm_parser');
 const fs = require('fs');
 const path = require('path');
 
-class CppCompiler{
+class CppCompiler extends ASMParser{
     constructor(){
-        this.cmd = 'g++';
+        super();
         this.tmpFile = path.join(__dirname,'files','demo.cpp');
         this.outFile = path.join(__dirname,'files','demo.s');
-        this.args = [this.tmpFile,'-S','-o',this.outFile];
+        this.cmd = `g++ "${this.tmpFile}" -S -o "${this.outFile}"`;
     }
 
-   async compile(code){
+    compile(code){
         var ws = fs.createWriteStream(this.tmpFile);
         ws.write(code);
         ws.end();
 
-        const p = spawn(this.cmd, this.args);
+        execSync(this.cmd);
 
-        let error = await streamToPromise(p.stderr);
-
-        return {filename: this.outFile, output:error.toString('utf-8')};
+        if(fs.existsSync(this.outFile)){
+            let asm = fs.readFileSync(this.outFile).toString();
+            let parsedAsm = this.parse(asm);
+            return parsedAsm ? parsedAsm : "<Compilation failed>";
+        }else{
+            return "<Compilation failed>";
+        }
     }
 }
 

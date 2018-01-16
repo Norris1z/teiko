@@ -3,17 +3,15 @@ const Compilers = require('./Compilers');
 
 class CodeHandler{
     response(parsedCode){
-        return new Promise((resolve,reject)=>{
-            if(parsedCode.hasOwnProperty('error')){
-                reject({error:parsedCode.error});
-            }
-            const {language,code} = parsedCode;
-    
-            if(!Compilers.supportsLanguage(language)){
-                reject({error: `Sorry! Teiko has no support for ${language} yet.`});
-            }
-            resolve(Compilers.compile(language,code));
-        });
+        if(parsedCode.hasOwnProperty('error')){
+            return {error:parsedCode.error};
+        }
+        const {language,code} = parsedCode;
+
+        if(!Compilers.supportsLanguage(language)){
+            return {error: `Sorry! Teiko has no support for ${language} yet.`};
+        }
+        return Compilers.compile(language,code);
     }
 }
 

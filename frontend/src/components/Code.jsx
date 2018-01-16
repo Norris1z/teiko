@@ -44,7 +44,6 @@ class Code extends Component{
             this.setOutput(response);
         }catch(e){
             this.setOutput('<Compilation failed...>');
-            console.log(e);
         }
     }
 

@@ -16,7 +16,6 @@ class Compilers{
     }
 
     compile(language,code){
-        //returns a promise
         return list_of_compilers[language].compiler.compile(code);
     }
 }
