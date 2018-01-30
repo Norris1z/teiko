@@ -12,9 +12,7 @@ class CppCompiler extends ASMParser{
     }
 
     compile(code){
-        var ws = fs.createWriteStream(this.tmpFile);
-        ws.write(code);
-        ws.end();
+        fs.writeFileSync(this.tmpFile,code);
 
         execSync(this.cmd);
 
