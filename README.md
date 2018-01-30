@@ -59,7 +59,7 @@ npm start
 
 Now in the browser, type your `c++/rust` code and watch it generate the `asm` output interactively.
 
-![C++ Demo](https://github.com/Norris1z/teiko/blob/master/images/c++.jpg)
+![C++ Demo](https://github.com/Norris1z/teiko/blob/master/images/c++_new.jpg)
 
 
 ## Project Goals
