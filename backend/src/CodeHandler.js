@@ -2,11 +2,8 @@ const Compilers = require('./Compilers');
 
 
 class CodeHandler{
-    response(parsedCode){
-        if(parsedCode.hasOwnProperty('error')){
-            return {error:parsedCode.error};
-        }
-        const {language,code} = parsedCode;
+    response(data){
+        const {language,code} = data;
 
         if(!Compilers.supportsLanguage(language)){
             return {error: `Sorry! Teiko has no support for ${language} yet.`};
