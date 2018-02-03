@@ -1,5 +1,5 @@
 const { execSync } = require('child_process');
-const ASMParser = require('../../utils/asm_parser');
+const ASMParser = require('../../src/parser');
 const fs = require('fs');
 const path = require('path');
 
@@ -9,6 +9,7 @@ class RustCompiler extends ASMParser{
         this.tmpFile = path.join(__dirname,'files','demo.rs');
         this.outFile = path.join(__dirname,'files','demo.s');
         this.cmd = `rustc --emit=asm "${this.tmpFile}" --crate-type=lib -o "${this.outFile}" -Awarnings`;
+        this.parser = new ASMParser();
     }
 
     compile(code){
@@ -18,8 +19,8 @@ class RustCompiler extends ASMParser{
 
         if(fs.existsSync(this.outFile)){
             let asm = fs.readFileSync(this.outFile).toString();
-            let parsedAsm = this.parse(asm);
-            return parsedAsm ? parsedAsm : "<Compilation failed>";
+            asm = this.parser.parse(asm);
+            return asm ? asm : "<Compilation failed>";
         }else{
             return "<Compilation failed>";
         }

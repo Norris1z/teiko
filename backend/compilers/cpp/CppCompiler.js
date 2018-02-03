@@ -1,14 +1,16 @@
 const { execSync } = require('child_process');
-const ASMParser = require('../../utils/asm_parser');
+const ASMParser = require('../../src/parser');
 const fs = require('fs');
 const path = require('path');
 
-class CppCompiler extends ASMParser{
+class CppCompiler{
     constructor(){
-        super();
         this.tmpFile = path.join(__dirname,'files','demo.cpp');
         this.outFile = path.join(__dirname,'files','demo.s');
         this.cmd = `g++ "${this.tmpFile}" -S -o "${this.outFile}"`;
+        // parses compiler output
+        this.parser = new ASMParser();
+
     }
 
     compile(code){
@@ -18,8 +20,8 @@ class CppCompiler extends ASMParser{
 
         if(fs.existsSync(this.outFile)){
             let asm = fs.readFileSync(this.outFile).toString();
-            let parsedAsm = this.parse(asm);
-            return parsedAsm ? parsedAsm : "<Compilation failed>";
+            asm = this.parser.parse(asm);
+            return asm ? asm : "<Compilation failed>";
         }else{
             return "<Compilation failed>";
         }
