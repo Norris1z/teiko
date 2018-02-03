@@ -8,10 +8,13 @@ const CodeHandler = require('./src/CodeHandler');
 app.use(cors());
 app.use(bodyParser.json());
 
-app.post('/compile',function(request,response){
-    let parsedCode = RequestParser.parse(request.body);
-    let compiledCode = CodeHandler.response(parsedCode);
-    response.json(compiledCode);
+app.post('/compile',function(request, response){
+    const data = RequestParser.parse(request.body);
+    if( data.error){
+    	return response.json(data);
+    }
+    const compiledCode = CodeHandler.response(data);
+    return response.json(compiledCode);
 });
 
 app.listen(process.env.PORT || 8000);
