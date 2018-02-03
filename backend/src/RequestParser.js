@@ -1,5 +1,4 @@
-class RequestParser{
-    parse(request){
+function requestParser(request){
         if(!request.hasOwnProperty('language')){
             return {error: 'Requests must contain a language property'};
         }
@@ -10,6 +9,5 @@ class RequestParser{
 
         return {language: request.language,code: request.code}
     }
-}
 
-module.exports = new RequestParser();
+module.exports = requestParser

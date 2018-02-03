@@ -2,14 +2,14 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const RequestParser = require('./src/RequestParser');
+const requestParser = require('./src/RequestParser');
 const CodeHandler = require('./src/CodeHandler');
 
 app.use(cors());
 app.use(bodyParser.json());
 
 app.post('/compile',function(request, response){
-    const data = RequestParser.parse(request.body);
+    const data = requestParser(request.body);
     if( data.error){
     	return response.json(data);
     }
